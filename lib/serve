@@ -13,7 +13,7 @@ const cert = path.join(__dirname, TMP_DIR, 'server.crt')
 
 const genCert = () => new Promise((resolve, reject) => {
   if (!fs.existsSync(key) || !fs.existsSync(cert)) {
-    sh.exec(path.join(__dirname, './cert.sh'), err => {
+    sh.exec(`cd ${__dirname} && ./cert.sh`, err => {
       if (err) reject(err)
       else resolve()
     })
