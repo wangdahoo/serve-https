@@ -26,6 +26,9 @@ const serve = (dir = '.', port = 5000) => {
   const app = express()
   const webroot = dir.indexOf('/') === 0 ? dir : path.resolve(dir)
   app.use(express.static(webroot))
+  app.get('/ca.pem', (req, res) => {
+    res.sendFile(path.join(__dirname, TMP_DIR, 'rootCA.pem'))
+  })
 
   https.createServer({
     key: fs.readFileSync(key),
@@ -33,6 +36,7 @@ const serve = (dir = '.', port = 5000) => {
   }, app).listen(port, err => {
     if (err) throw err
     console.info(`Listen on https://localhost:${port}`)
+    console.info(`Download your CA and make it local trusted to prevent browser's unsafe warning/error => https://localhost:${port}/ca.pem`)
   })
 }
 

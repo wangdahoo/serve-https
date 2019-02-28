@@ -1,8 +1,26 @@
 {
-  "name": "serve-https",
+  "name": "@wangdahoo/serve-https",
   "version": "0.1.0",
+  "description": "> Serve your stuff via https on localhost, useful in development.",
   "main": "lib/serve",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangdahoo/serve-https.git"
+  },
+  "keywords": [
+    "serve-https",
+    "serve https",
+    "servehttps"
+  ],
+  "author": "wangdahoo <157195705@qq.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangdahoo/serve-https/issues"
+  },
+  "homepage": "https://github.com/wangdahoo/serve-https#readme",
   "dependencies": {
     "commander": "^2.19.0",
     "express": "^4.16.4",
@@ -10,5 +28,8 @@
   },
   "bin": {
     "serve-https": "lib/serve"
+  },
+  "engines": {
+    "node": ">=8.9"
   }
 }
