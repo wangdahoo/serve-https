@@ -1,0 +1,11 @@
+{
+  "name": "serve-https",
+  "version": "1.0.0",
+  "main": "lib/serve",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.19.0",
+    "express": "^4.16.4",
+    "shelljs": "^0.8.3"
+  }
+}

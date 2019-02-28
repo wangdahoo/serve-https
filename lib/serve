@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+const fs = require('fs')
+const path = require('path')
+const https = require('https')
+const program = require('commander')
+const express = require('express')
+const sh = require('shelljs')
+const pkg = require('../package.json')
+
+const TMP_DIR = '../.tmp'
+const key = path.join(__dirname, TMP_DIR, 'server.key')
+const cert = path.join(__dirname, TMP_DIR, 'server.crt')
+
+const genCert = () => new Promise((resolve, reject) => {
+  if (!fs.existsSync(key) || !fs.existsSync(cert)) {
+    sh.exec(path.join(__dirname, './cert.sh'), err => {
+      if (err) reject(err)
+      else resolve()
+    })
+  } else {
+    resolve()
+  }
+})
+
+const serve = (dir = '.', port = 5000) => {
+  const app = express()
+  const webroot = dir.indexOf('/') === 0 ? dir : path.resolve(dir)
+  app.use(express.static(webroot))
+
+  https.createServer({
+    key: fs.readFileSync(key),
+    cert: fs.readFileSync(cert)
+  }, app).listen(port, err => {
+    if (err) throw err
+    console.info(`Listen on https://localhost:${port}`)
+  })
+}
+
+program
+  .version(pkg.version, '-v, --version')
+
+program
+  .usage('[options] <webroot>')
+  .description('serve your resources via a https server on localhost')
+  .option('--port [port]', 'port to listen')
+
+program
+  .arguments('<webroot>')
+  .action(function (webroot, options) {
+    // console.log(webroot, options.port)
+
+    genCert().then(() => serve(webroot, options.port))
+  })
+
+program.parse(process.argv)
