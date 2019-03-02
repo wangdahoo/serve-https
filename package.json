@@ -1,7 +1,7 @@
 {
   "name": "@wangdahoo/serve-https",
-  "version": "0.3.1",
-  "description": "> Serve your stuff via https on localhost, useful in development.",
+  "version": "0.3.2",
+  "description": "Serve your stuff via https on localhost, useful in development.",
   "main": "lib/serve",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
