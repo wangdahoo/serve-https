@@ -24,7 +24,7 @@ const genCert = () => new Promise((resolve, reject) => {
   }
 })
 
-const serve = (dir = '.', port = 5000) => {
+const serve = (dir = , port = 5000) => {
   const app = express()
   const webroot = dir.indexOf('/') === 0 ? dir : path.resolve(dir)
   app.use(express.static(webroot))
@@ -68,16 +68,7 @@ program
 
 program
   .arguments('<webroot>')
-  .action(function (webroot, options) {
-    // console.log(webroot, options.port)
-
-    genCert()
-      .then(() => serve(webroot, options.port))
-      .catch(e => {
-        console.log('!')
-        console.log(e)
-      })
-  })
+  .action((webroot, options) => genCert().then(() => serve(webroot, options.port)))
 
 if (process.argv.slice(2).length === 0) {
   program.outputHelp()
