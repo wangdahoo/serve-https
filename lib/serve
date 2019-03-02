@@ -5,6 +5,8 @@ const https = require('https')
 const program = require('commander')
 const express = require('express')
 const sh = require('shelljs')
+const chalk = require('chalk')
+const boxen = require('boxen')
 const pkg = require('../package.json')
 
 const TMP_DIR = '../.tmp'
@@ -30,14 +32,30 @@ const serve = (dir = '.', port = 5000) => {
     res.sendFile(path.join(__dirname, TMP_DIR, 'rootCA.pem'))
   })
 
-  https.createServer({
+  const server = https.createServer({
     key: fs.readFileSync(key),
     cert: fs.readFileSync(cert)
-  }, app).listen(port, err => {
-    if (err) throw err
-    console.info(`Listen on https://localhost:${port}`)
-    console.info(`Download your CA and make it local trusted to prevent browser's unsafe warning/error => https://localhost:${port}/ca.pem`)
+  }, app)
+  
+  server.listen(port, () => {
+    const prefix = '- '
+    let message = chalk.green('Serving!\n')
+    
+    message += `\n${prefix}${chalk.bold('Listen on:')}        https://localhost:${port}`
+    message += `\n${prefix}${chalk.bold('CA download url:')}  https://localhost:${port}/ca.pem`
+
+    message += `\n\n${chalk.grey('Download CA and make it local trusted to prevent browser\'s unsafe warning/error.')}`
+
+    console.log(boxen(message, {
+      padding: 1,
+      borderColor: 'green',
+      margin: 1
+    }))
   })
+
+  server.on('error', err => {
+    console.log(`${chalk.red('Error:')}  ${err.message}`)
+  })  
 }
 
 program
@@ -53,7 +71,16 @@ program
   .action(function (webroot, options) {
     // console.log(webroot, options.port)
 
-    genCert().then(() => serve(webroot, options.port))
+    genCert()
+      .then(() => serve(webroot, options.port))
+      .catch(e => {
+        console.log('!')
+        console.log(e)
+      })
   })
+
+if (process.argv.slice(2).length === 0) {
+  program.outputHelp()
+}
 
 program.parse(process.argv)
