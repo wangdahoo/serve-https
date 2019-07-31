@@ -24,7 +24,7 @@ const genCert = () => new Promise((resolve, reject) => {
   }
 })
 
-const serve = (dir = , port = 5000) => {
+const serve = (dir, port = 5000) => {
   const app = express()
   const webroot = dir.indexOf('/') === 0 ? dir : path.resolve(dir)
   app.use(express.static(webroot))

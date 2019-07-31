@@ -1,6 +1,6 @@
 {
   "name": "@wangdahoo/serve-https",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Serve your stuff via https on localhost, useful in development.",
   "main": "lib/serve",
   "scripts": {
